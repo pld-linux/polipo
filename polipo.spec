@@ -22,7 +22,7 @@ Polipo is a caching web proxy designed to be used as a personal cache
 or a cache shared among a few users.
 
 %description -l pl
-Polipo jest keszuj±cym serwerem proxy przeznaczonym do u¿ycia
+Polipo jest buforuj±cym serwerem proxy przeznaczonym do u¿ycia
 prywatnego lub dla niewielkiej liczby u¿ytkowników.
 
 %prep
@@ -30,17 +30,22 @@ prywatnego lub dla niewielkiej liczby u¿ytkowników.
 %patch0 -p1
 
 %build
-%{__make} CC="%{__cc}" CFLAGS="%{rpmcflags}" PREFIX="%{_prefix}"
+%{__make} \
+	CC="%{__cc}" \
+	CFLAGS="%{rpmcflags}" \
+	PREFIX="%{_prefix}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
+
 install -D %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install -D config.sample $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/config
 touch $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/forbidden
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT PREFIX="%{_prefix}"
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT \
+	PREFIX="%{_prefix}"
 
 # /etc/sysconfig/polipo
 cat << EOF > $RPM_BUILD_ROOT/etc/sysconfig/%{name}
