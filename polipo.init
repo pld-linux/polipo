@@ -1,0 +1,98 @@
+#!/bin/sh
+#
+# polipo	Polipo - a caching web proxy	
+#
+# chkconfig:	345 99 99 
+#
+# description:	Polipo is a caching web proxy designed to be used \
+#		as a personal cache or a cache shared among a few users.
+#
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Get service config - may override defaults
+[ -f /etc/sysconfig/polipo ] && . /etc/sysconfig/polipo
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network ]; then
+		# nls "ERROR: Networking is down. %s can't be run." polipo
+		msg_network_down polipo
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/polipo ]; then
+		# show "Starting %s service" polipo
+		msg_starting polipo
+		daemon polipo daemonise=true
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/polipo
+	else
+		# show "%s service is already running." polipo
+		msg_already_running polipo
+	fi
+	;;
+  stop)
+	if [ -f /var/lock/subsys/polipo ]; then
+		# Stop daemons.
+		# show "Stopping %s service" polipo
+		msg_stopping polipo
+		killproc polipo
+		rm -f /var/lock/subsys/polipo
+	else
+		# show "%s service is not running." polipo
+		msg_not_running polipo
+	fi
+	;;
+  restart)
+	$0 stop
+	$0 start
+	exit $?
+	;;
+  reload)
+	if [ -f /var/lock/subsys/polipo ]; then
+		# show "Reload %s service" polipo
+		msg_reloading polipo
+		killproc polipo -HUP
+		RETVAL=$?
+	else
+		# show "%s service is not running." polipo
+		msg_not_running polipo >&2
+		RETVAL=7
+	fi
+	;;
+  force-reload)
+	# if program allows reloading without stopping
+	$0 reload
+
+	# or if it doesn't
+	$0 restart
+
+	exit $?
+	;;
+  status)
+	status polipo
+	RETVAL=$?
+	;;
+  *)
+	# show "Usage: %s {start|stop|restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
