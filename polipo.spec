@@ -1,0 +1,83 @@
+Summary:	Polipo - a caching web proxy
+Name:		polipo
+Version:	0.9.7
+Release:	0.1
+Epoch:		0
+License:	distributable
+Group:		Networking/Daemons
+Source0:	http://www.pps.jussieu.fr/~jch/software/files/%{name}-%{version}.tar.gz
+# Source0-md5:	76fda6c864711f45a80db428a9f1da31
+Source1:	%{name}.init
+Patch0:		%{name}-Makefile.patch
+URL:		http://www.pps.jussieu.fr/~jch/software/polipo/
+BuildRequires:	texinfo
+BuildRequires:  autoconf
+PreReq:         rc-scripts
+Requires(post,preun):   /sbin/chkconfig
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%description
+Polipo is a caching web proxy designed to be used as a personal cache
+or a cache shared among a few users.
+
+%prep
+%setup -q
+%patch0 -p1
+
+%build
+%{__make} CC="%{__cc}" CFLAGS="%{rpmcflags}" PREFIX="%{_prefix}"
+
+%install
+rm -rf $RPM_BUILD_ROOT
+
+install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
+install -D %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install -D config.sample $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/config
+touch $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/forbidden
+
+%{__make} install DESTDIR=$RPM_BUILD_ROOT PREFIX="%{_prefix}"
+
+# /etc/sysconfig/polipo
+cat << EOF > $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+# Customized setings for %{name}
+
+# Nice level:
+SERVICE_RUN_NICE_LEVEL="+1"
+
+EOF
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+/sbin/chkconfig --add %{name}
+if [ -f /var/lock/subsys/%{name} ]; then
+        /etc/rc.d/init.d/%{name} restart 1>&2
+else
+        echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+        if [ -f /var/lock/subsys/%{name} ]; then
+                /etc/rc.d/init.d/%{name} stop 1>&2
+        fi
+        /sbin/chkconfig --del %{name}
+fi
+
+%postun
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+
+%files
+%defattr(644,root,root,755)
+%doc CHANGES COPYING INSTALL README
+%attr(755,root,root) %{_bindir}/*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/config
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/forbidden
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%{_datadir}/%{name}
+%dir %{_var}/cache/%{name}
+%{_mandir}/man1/*
+%{_infodir}/*
