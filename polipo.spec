@@ -11,8 +11,8 @@ Source0:	http://www.pps.jussieu.fr/~jch/software/files/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.pps.jussieu.fr/~jch/software/polipo/
-BuildRequires:	texinfo
 BuildRequires:	autoconf
+BuildRequires:	texinfo
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
