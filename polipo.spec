@@ -12,9 +12,9 @@ Source1:	%{name}.init
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.pps.jussieu.fr/~jch/software/polipo/
 BuildRequires:	texinfo
-BuildRequires:  autoconf
-PreReq:         rc-scripts
-Requires(post,preun):   /sbin/chkconfig
+BuildRequires:	autoconf
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -22,8 +22,8 @@ Polipo is a caching web proxy designed to be used as a personal cache
 or a cache shared among a few users.
 
 %description -l pl
-Polipo jest keszuj±cym serwerem proxy przeznaczonym do u¿ycia prywatnego
-lub dla niewielkiej liczby u¿ytkowników.
+Polipo jest keszuj±cym serwerem proxy przeznaczonym do u¿ycia
+prywatnego lub dla niewielkiej liczby u¿ytkowników.
 
 %prep
 %setup -q
@@ -58,17 +58,17 @@ rm -rf $RPM_BUILD_ROOT
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 /sbin/chkconfig --add %{name}
 if [ -f /var/lock/subsys/%{name} ]; then
-        /etc/rc.d/init.d/%{name} restart 1>&2
+	/etc/rc.d/init.d/%{name} restart 1>&2
 else
-        echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
+	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
 fi
 
 %preun
 if [ "$1" = "0" ]; then
-        if [ -f /var/lock/subsys/%{name} ]; then
-                /etc/rc.d/init.d/%{name} stop 1>&2
-        fi
-        /sbin/chkconfig --del %{name}
+	if [ -f /var/lock/subsys/%{name} ]; then
+		/etc/rc.d/init.d/%{name} stop 1>&2
+	fi
+	/sbin/chkconfig --del %{name}
 fi
 
 %postun
