@@ -78,6 +78,7 @@ fi
 %defattr(644,root,root,755)
 %doc CHANGES COPYING INSTALL README
 %attr(755,root,root) %{_bindir}/*
+%dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/config
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/forbidden
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
