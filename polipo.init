@@ -20,7 +20,6 @@
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network ]; then
-		# nls "ERROR: Networking is down. %s can't be run." polipo
 		msg_network_down polipo
 		exit 1
 	fi
@@ -34,25 +33,21 @@ case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/polipo ]; then
-		# show "Starting %s service" polipo
 		msg_starting polipo
 		daemon polipo daemonise=true
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/polipo
 	else
-		# show "%s service is already running." polipo
 		msg_already_running polipo
 	fi
 	;;
   stop)
 	if [ -f /var/lock/subsys/polipo ]; then
 		# Stop daemons.
-		# show "Stopping %s service" polipo
 		msg_stopping polipo
 		killproc polipo
 		rm -f /var/lock/subsys/polipo
 	else
-		# show "%s service is not running." polipo
 		msg_not_running polipo
 	fi
 	;;
@@ -63,12 +58,10 @@ case "$1" in
 	;;
   reload)
 	if [ -f /var/lock/subsys/polipo ]; then
-		# show "Reload %s service" polipo
 		msg_reloading polipo
 		killproc polipo -HUP
 		RETVAL=$?
 	else
-		# show "%s service is not running." polipo
 		msg_not_running polipo >&2
 		RETVAL=7
 	fi
@@ -87,7 +80,6 @@ case "$1" in
 	RETVAL=$?
 	;;
   *)
-	# show "Usage: %s {start|stop|restart|reload|force-reload|status}"
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
 	exit 3
 esac
