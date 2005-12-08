@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# polipo	Polipo - a caching web proxy	
+# polipo	Polipo - a caching web proxy
 #
-# chkconfig:	345 99 99 
+# chkconfig:	345 99 99
 #
 # description:	Polipo is a caching web proxy designed to be used \
 #		as a personal cache or a cache shared among a few users.
