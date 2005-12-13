@@ -13,8 +13,8 @@ Patch0:		%{name}-Makefile.patch
 URL:		http://www.pps.jussieu.fr/~jch/software/polipo/
 BuildRequires:	autoconf
 BuildRequires:	texinfo
-Requires:	rc-scripts
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -84,9 +84,9 @@ fi
 %doc CHANGES COPYING INSTALL README
 %attr(755,root,root) %{_bindir}/*
 %dir %{_sysconfdir}/%{name}
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/config
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/forbidden
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/%{name}
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/config
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/forbidden
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_datadir}/%{name}
 %dir %{_var}/cache/%{name}
