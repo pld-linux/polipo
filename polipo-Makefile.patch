@@ -1,42 +1,36 @@
---- polipo-0.9.7/Makefile~	2004-06-29 02:07:35.000000000 +0200
-+++ polipo-0.9.7/Makefile	2005-01-04 05:35:50.243242616 +0100
-@@ -1,26 +1,18 @@
+--- polipo-0.9.10/Makefile~	2006-09-19 10:34:04.152129305 +0300
++++ polipo-0.9.10/Makefile	2006-09-19 10:36:01.794774951 +0300
+@@ -1,9 +1,18 @@
  PREFIX = /usr/local
  BINDIR = $(PREFIX)/bin
 -MANDIR = $(PREFIX)/man
 -INFODIR = $(PREFIX)/info
 -LOCAL_ROOT = /usr/share/polipo/www
 -DISK_CACHE_ROOT = /var/cache/polipo
--
--# CDEBUGFLAGS = -O
--
--# CC = gcc
--# CDEBUGFLAGS = -O -g -Wall -std=gnu99
--CDEBUGFLAGS = -O -g -Wall
--# CDEBUGFLAGS = -Os -Wall
--# CDEBUGFLAGS = -g -Wall
--
--# CC = c89
--# CC = c99
--# CDEBUGFLAGS=-O
 +DATADIR = $(PREFIX)/share
 +MANDIR = $(DATADIR)/man
 +INFODIR = $(DATADIR)/info
 +LOCAL_ROOT = $(DATADIR)/polipo/www
 +LOCALSTATEDIR = /var
 +DISK_CACHE_ROOT = $(LOCALSTATEDIR)/cache/polipo
-+DESTDIR = /
- 
--# To compile with icc, you need -restrict.  (Their bug.)
++DESTDIR = 
++
 +# for /usr/sbin/install-info
 +PATH += :/usr/sbin
- 
--# CC=icc
--# CDEBUGFLAGS = -O -restrict
++  
 +CC = cc
 +CFLAGS = -O2 -Wall
  
- # On System V (Solaris, HP/UX) you need the following:
+ # CDEBUGFLAGS = -O
+ 
+@@ -11,7 +20,7 @@
+ 
+ # CC = gcc
+ # CDEBUGFLAGS = -O -g -Wall -std=gnu99
+-CDEBUGFLAGS = -O -g -Wall
++# CDEBUGFLAGS = -O -g -Wall
+ # CDEBUGFLAGS = -Os -Wall
+ # CDEBUGFLAGS = -g -Wall
  
 @@ -45,9 +37,7 @@
  #      gethostbyname/getaddrinfo when DNS requests fail.
