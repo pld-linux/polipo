@@ -1,5 +1,5 @@
 Summary:	Polipo - a caching web proxy
-Summary(pl):	Polipo - ma≥y serwer cache-proxy
+Summary(pl.UTF-8):   Polipo - ma≈Çy serwer cache-proxy
 Name:		polipo
 Version:	0.9.10
 Release:	1
@@ -21,9 +21,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Polipo is a caching web proxy designed to be used as a personal cache
 or a cache shared among a few users.
 
-%description -l pl
-Polipo jest buforuj±cym serwerem proxy przeznaczonym do uøycia
-prywatnego lub dla niewielkiej liczby uøytkownikÛw.
+%description -l pl.UTF-8
+Polipo jest buforujƒÖcym serwerem proxy przeznaczonym do u≈ºycia
+prywatnego lub dla niewielkiej liczby u≈ºytkownik√≥w.
 
 %prep
 %setup -q
