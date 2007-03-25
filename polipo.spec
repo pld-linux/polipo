@@ -1,13 +1,13 @@
 Summary:	Polipo - a caching web proxy
 Summary(pl.UTF-8):	Polipo - mały serwer cache-proxy
 Name:		polipo
-Version:	0.9.10
-Release:	1
+Version:	1.0.0
+Release:	0.1
 Epoch:		0
 License:	distributable
 Group:		Networking/Daemons
 Source0:	http://www.pps.jussieu.fr/~jch/software/files/polipo/%{name}-%{version}.tar.gz
-# Source0-md5:	257b2a2e0e435b40a614318e0f2a2099
+# Source0-md5:	e9db1fadbce47b8664351d14510bd5c9
 Source1:	%{name}.init
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.pps.jussieu.fr/~jch/software/polipo/
