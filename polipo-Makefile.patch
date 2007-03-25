@@ -1,6 +1,7 @@
---- polipo-0.9.10/Makefile~	2006-09-19 10:34:04.152129305 +0300
-+++ polipo-0.9.10/Makefile	2006-09-19 10:36:01.794774951 +0300
-@@ -1,9 +1,18 @@
+--- b/Makefile	2007-03-06 20:29:05.000000000 +0100
++++ n/Makefile	2007-03-25 12:57:54.037181859 +0200
+@@ -1,9 +1,15 @@
++PKGNAME = polipo
  PREFIX = /usr/local
  BINDIR = $(PREFIX)/bin
 -MANDIR = $(PREFIX)/man
@@ -10,54 +11,47 @@
 +DATADIR = $(PREFIX)/share
 +MANDIR = $(DATADIR)/man
 +INFODIR = $(DATADIR)/info
-+LOCAL_ROOT = $(DATADIR)/polipo/www
++PKGDATADIR = $(DATADIR)/$(PKGNAME)
++LOCAL_ROOT = $(PKGDATADIR)/www
 +LOCALSTATEDIR = /var
-+DISK_CACHE_ROOT = $(LOCALSTATEDIR)/cache/polipo
-+DESTDIR = 
++DISK_CACHE_ROOT = $(LOCALSTATEDIR)/cache/$(PKGNAME)
 +
-+# for /usr/sbin/install-info
 +PATH += :/usr/sbin
-+  
-+CC = cc
-+CFLAGS = -O2 -Wall
  
- # CDEBUGFLAGS = -O
+ # To compile with Unix CC:
  
-@@ -11,7 +20,7 @@
+@@ -12,8 +18,10 @@
+ # To compile with GCC:
  
  # CC = gcc
- # CDEBUGFLAGS = -O -g -Wall -std=gnu99
--CDEBUGFLAGS = -O -g -Wall
-+# CDEBUGFLAGS = -O -g -Wall
++CFLAGS = -O2
++override CFLAGS += -Wall
+ # CDEBUGFLAGS = -Os -g -Wall -std=gnu99
+-CDEBUGFLAGS = -Os -g -Wall
++# CDEBUGFLAGS = -Os -g -Wall
  # CDEBUGFLAGS = -Os -Wall
  # CDEBUGFLAGS = -g -Wall
  
-@@ -45,9 +37,7 @@
- #      gethostbyname/getaddrinfo when DNS requests fail.
- #  -DNO_TUNNEL to compile out the code that handles CONNECT requests.
+@@ -62,8 +70,6 @@
  
--DEFINES = $(FILE_DEFINES) $(PLATFORM_DEFINES)
--
+ DEFINES = $(FILE_DEFINES) $(PLATFORM_DEFINES)
+ 
 -CFLAGS = $(MD5INCLUDES) $(CDEBUGFLAGS) $(DEFINES) $(EXTRA_DEFINES)
-+DEFINES += $(FILE_DEFINES) $(PLATFORM_DEFINES)
- 
+-
  SRCS = util.c event.c io.c chunk.c atom.c object.c log.c diskcache.c main.c \
         config.c local.c http.c client.c server.c auth.c tunnel.c \
-@@ -60,7 +50,7 @@
-        md5import.o ftsimport.o \
+        http_parse.c parse_time.c dns.c forbidden.c \
+@@ -75,7 +81,7 @@
+        md5import.o ftsimport.o socks.o mingw.o
  
- polipo: $(OBJS)
--	$(CC) $(CFLAGS) $(LDFLAGS) -o polipo $(OBJS) $(MD5LIBS) $(LDLIBS)
-+	$(CC) $(CFLAGS) $(LDFLAGS) $(MD5INCLUDES) $(DEFINES) $(EXTRA_DEFINES) -o polipo $(OBJS) $(MD5LIBS) $(LDLIBS)
+ polipo$(EXE): $(OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -o polipo$(EXE) $(OBJS) $(MD5LIBS) $(LDLIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(MD5INCLUDES) $(DEFINES) $(EXTRA_DEFINES) -o polipo$(EXE) $(OBJS) $(MD5LIBS) $(LDLIBS)
  
  ftsimport.o: ftsimport.c fts_compat.c
  
-@@ -68,30 +58,33 @@
- 
- all: polipo polipo.info html/index.html localindex.html
- 
--install: install.binary install.man
-+install: install.binary install.man install.info
+@@ -88,27 +94,29 @@
+ install: install.binary install.man
  
  install.binary: all
 -	mkdir -p $(TARGET)$(BINDIR)
@@ -68,13 +62,12 @@
 -	cp -f html/* $(TARGET)$(LOCAL_ROOT)/doc
 -	cp -f localindex.html $(TARGET)$(LOCAL_ROOT)/index.html
 +	install -d $(DESTDIR)$(BINDIR)
-+	install -d $(DESTDIR)$(LOCAL_ROOT)
-+	install -d $(DESTDIR)$(LOCAL_ROOT)/doc
 +	install -d $(DESTDIR)$(DISK_CACHE_ROOT)
-+	rm -f $(DESTDIR)$(BINDIR)/polipo
-+	install polipo $(DESTDIR)$(BINDIR)/
-+	install localindex.html $(DESTDIR)$(LOCAL_ROOT)/index.html
++	install -d $(DESTDIR)$(LOCAL_ROOT)/doc
++	rm -f $(DESTDIR)$(BINDIR)/$(PKGNAME)
++	install polipo $(DESTDIR)$(BINDIR)
 +	install html/* $(DESTDIR)$(LOCAL_ROOT)/doc
++	install localindex.html $(DESTDIR)$(LOCAL_ROOT)/index.html
  
  install.man: all
 -	mkdir -p $(TARGET)$(MANDIR)/man1
@@ -82,14 +75,15 @@
 -	cp -f polipo.man $(TARGET)$(MANDIR)/man1/polipo.1
 -	cp polipo.info $(TARGET)$(INFODIR)/
 -	install-info --info-dir=$(INFODIR) polipo.info
+-
 +	install -d $(DESTDIR)$(MANDIR)/man1
 +	install -d $(DESTDIR)$(INFODIR)
 +	install -D polipo.man $(DESTDIR)$(MANDIR)/man1/polipo.1
++	install polipo.info $(DESTDIR)$(INFODIR)
 +
 +install.info: all
-+	install polipo.info $(DESTDIR)$(INFODIR)
-+       	install-info --info-dir=$(DESTDIR)$(INFODIR) polipo.info
- 
++	install -d polipo.info $(DESTDIR)$(INFODIR)
++	install-info --info-dir=$(DESTDIR)$(INFODIR) polipo.info
  
  polipo.info: polipo.texi
  	makeinfo polipo.texi
