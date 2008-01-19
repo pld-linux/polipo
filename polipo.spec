@@ -1,13 +1,13 @@
 Summary:	Polipo - a caching web proxy
 Summary(pl.UTF-8):	Polipo - mały serwer cache-proxy
 Name:		polipo
-Version:	0.9.10
+Version:	1.0.4
 Release:	1
 Epoch:		0
 License:	distributable
 Group:		Networking/Daemons
 Source0:	http://www.pps.jussieu.fr/~jch/software/files/polipo/%{name}-%{version}.tar.gz
-# Source0-md5:	257b2a2e0e435b40a614318e0f2a2099
+# Source0-md5:	defdce7f8002ca68705b6c2c36c4d096
 Source1:	%{name}.init
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.pps.jussieu.fr/~jch/software/polipo/
@@ -39,13 +39,14 @@ prywatnego lub dla niewielkiej liczby użytkowników.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
 install -d $RPM_BUILD_ROOT%{_datadir}/info
+install -d $RPM_BUILD_ROOT/var/cache/polipo
 
 install -D %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install -D config.sample $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/config
 touch $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/forbidden
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
+	TARGET=$RPM_BUILD_ROOT \
 	PREFIX="%{_prefix}"
 
 # /etc/sysconfig/polipo
