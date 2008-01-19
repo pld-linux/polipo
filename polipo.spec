@@ -2,7 +2,7 @@ Summary:	Polipo - a caching web proxy
 Summary(pl.UTF-8):	Polipo - mały serwer cache-proxy
 Name:		polipo
 Version:	1.0.4
-Release:	1
+Release:	2
 Epoch:		0
 License:	distributable
 Group:		Networking/Daemons

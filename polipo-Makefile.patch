@@ -1,5 +1,5 @@
 --- Makefile	2008-01-19 19:32:59.239742634 +0100
-+++ polipo-1.0.4/Makefile	2008-01-19 19:33:25.454380738 +0100
++++ polipo-1.0.4/Makefile	2008-01-19 19:57:15.435951943 +0100
 @@ -1,7 +1,7 @@
  PREFIX = /usr/local
  BINDIR = $(PREFIX)/bin
@@ -10,3 +10,30 @@
  LOCAL_ROOT = /usr/share/polipo/www
  DISK_CACHE_ROOT = /var/cache/polipo
  
+@@ -13,7 +13,7 @@
+ 
+ # CC = gcc
+ # CDEBUGFLAGS = -Os -g -Wall -std=gnu99
+-CDEBUGFLAGS = -Os -g -Wall
++# CDEBUGFLAGS = -Os -g -Wall
+ # CDEBUGFLAGS = -Os -Wall
+ # CDEBUGFLAGS = -g -Wall
+ 
+@@ -63,7 +63,7 @@
+ 
+ DEFINES = $(FILE_DEFINES) $(PLATFORM_DEFINES)
+ 
+-CFLAGS = $(MD5INCLUDES) $(CDEBUGFLAGS) $(DEFINES) $(EXTRA_DEFINES)
++override CFLAGS += $(MD5INCLUDES) $(CDEBUGFLAGS) $(DEFINES) $(EXTRA_DEFINES)
+ 
+ SRCS = util.c event.c io.c chunk.c atom.c object.c log.c diskcache.c main.c \
+        config.c local.c http.c client.c server.c auth.c tunnel.c \
+@@ -102,7 +102,7 @@
+ 	mkdir -p $(TARGET)$(INFODIR)
+ 	cp -f polipo.man $(TARGET)$(MANDIR)/man1/polipo.1
+ 	cp polipo.info $(TARGET)$(INFODIR)/
+-	install-info --info-dir=$(TARGET)$(INFODIR) polipo.info
++	/usr/sbin/install-info --info-dir=$(TARGET)$(INFODIR) polipo.info
+ 
+ 
+ polipo.info: polipo.texi
