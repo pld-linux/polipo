@@ -1,0 +1,4 @@
+# Customized settings for polipo
+
+# Nice level:
+SERVICE_RUN_NICE_LEVEL="+1"
