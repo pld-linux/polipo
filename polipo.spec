@@ -9,9 +9,11 @@ Group:		Networking/Daemons
 Source0:	http://www.pps.jussieu.fr/~jch/software/files/polipo/%{name}-%{version}.tar.gz
 # Source0-md5:	defdce7f8002ca68705b6c2c36c4d096
 Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 Patch0:		%{name}-Makefile.patch
 URL:		http://www.pps.jussieu.fr/~jch/software/polipo/
 BuildRequires:	autoconf
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	texinfo
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
@@ -49,14 +51,7 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/forbidden
 	TARGET=$RPM_BUILD_ROOT \
 	PREFIX="%{_prefix}"
 
-# /etc/sysconfig/polipo
-cat << EOF > $RPM_BUILD_ROOT/etc/sysconfig/%{name}
-# Customized setings for %{name}
-
-# Nice level:
-SERVICE_RUN_NICE_LEVEL="+1"
-
-EOF
+cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -64,17 +59,11 @@ rm -rf $RPM_BUILD_ROOT
 %post
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 /sbin/chkconfig --add %{name}
-if [ -f /var/lock/subsys/%{name} ]; then
-	/etc/rc.d/init.d/%{name} restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
-fi
+%service %{name} restart
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/%{name} ]; then
-		/etc/rc.d/init.d/%{name} stop 1>&2
-	fi
+	%service %{name} stop
 	/sbin/chkconfig --del %{name}
 fi
 
