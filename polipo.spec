@@ -3,8 +3,7 @@ Summary(pl.UTF-8):	Polipo - mały serwer cache-proxy
 Name:		polipo
 Version:	1.0.4
 Release:	2
-Epoch:		0
-License:	distributable
+License:	MIT
 Group:		Networking/Daemons
 Source0:	http://www.pps.jussieu.fr/~jch/software/files/polipo/%{name}-%{version}.tar.gz
 # Source0-md5:	defdce7f8002ca68705b6c2c36c4d096
@@ -73,7 +72,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc CHANGES COPYING INSTALL README
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/polipo
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/config
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/forbidden
@@ -81,5 +80,5 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %{_datadir}/%{name}
 %dir %{_var}/cache/%{name}
-%{_mandir}/man1/*
+%{_mandir}/man1/polipo.1*
 %{_infodir}/*
