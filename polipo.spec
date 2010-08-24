@@ -1,12 +1,14 @@
+%define		subver	20091115
+%define		rel		1
 Summary:	Polipo - a caching web proxy
 Summary(pl.UTF-8):	Polipo - mały serwer cache-proxy
 Name:		polipo
 Version:	1.0.4
-Release:	2
+Release:	dev.0.%{subver}.%{rel}
 License:	MIT
 Group:		Networking/Daemons
-Source0:	http://www.pps.jussieu.fr/~jch/software/files/polipo/%{name}-%{version}.tar.gz
-# Source0-md5:	defdce7f8002ca68705b6c2c36c4d096
+Source0:	http://freehaven.net/~chrisd/polipo/%{name}-%{subver}.tar.gz
+# Source0-md5:	206fe38ec574023162de950e58ec0ff1
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-Makefile.patch
@@ -27,7 +29,7 @@ Polipo jest buforującym serwerem proxy przeznaczonym do użycia
 prywatnego lub dla niewielkiej liczby użytkowników.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{subver}
 %patch0 -p1
 
 %build
