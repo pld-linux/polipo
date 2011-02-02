@@ -2,7 +2,7 @@ Summary:	Polipo - a caching web proxy
 Summary(pl.UTF-8):	Polipo - mały serwer cache-proxy
 Name:		polipo
 Version:	1.0.4
-Release:	2
+Release:	3
 License:	MIT
 Group:		Networking/Daemons
 Source0:	http://www.pps.jussieu.fr/~jch/software/files/polipo/%{name}-%{version}.tar.gz
@@ -39,18 +39,20 @@ prywatnego lub dla niewielkiej liczby użytkowników.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d}
-install -d $RPM_BUILD_ROOT%{_datadir}/info
+install -d $RPM_BUILD_ROOT%{_infodir}
 install -d $RPM_BUILD_ROOT/var/cache/polipo
 
-install -D %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install -D config.sample $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/config
+install -Dp %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install -Dp config.sample $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/config
 touch $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/forbidden
 
 %{__make} install \
 	TARGET=$RPM_BUILD_ROOT \
 	PREFIX="%{_prefix}"
 
-cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+
+rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -81,4 +83,4 @@ fi
 %{_datadir}/%{name}
 %dir %{_var}/cache/%{name}
 %{_mandir}/man1/polipo.1*
-%{_infodir}/*
+%{_infodir}/polipo.info.gz
