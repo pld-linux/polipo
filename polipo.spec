@@ -83,4 +83,4 @@ fi
 %{_datadir}/%{name}
 %dir %{_var}/cache/%{name}
 %{_mandir}/man1/polipo.1*
-%{_infodir}/polipo.info.gz
+%{_infodir}/polipo.info*
