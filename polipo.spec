@@ -28,7 +28,7 @@ prywatnego lub dla niewielkiej liczby użytkowników.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 %build
 %{__make} \
